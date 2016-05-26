@@ -1,10 +1,19 @@
 <?php
     
-    require "/php/word.php"
-    require "/php/session.php"
-    require "/php/score.php"
+    require "/php/word.php";
+    require "/php/settings.php";
 
     session_start();
+
+    if((!loadConfig()) || (!$_SESSION['setup'])){
+        $page = "SETUP";
+    }else{
+        if(isset($_GET['page'])){
+            $page = strtoupper($_GET['page']);
+        }else{
+            $page = "WORD";
+        }
+    }
 
 ?>
 <!doctype html>
@@ -22,6 +31,10 @@
     	<link rel="stylesheet" href="css/site.css" />
   	</head>
     <body>
+    <?php
 
+
+
+    ?>
     </body>
 </html>

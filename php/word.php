@@ -9,10 +9,22 @@
 			-> set word to session
 			-> return word
 		*/
+		//$_SESSION['wordID'] = "";
+		//$_SESSION['wordPrefix'] = "";
+		//$_SESSION['word'] = "";
 	}
 
 	function checkWord($wordPrefix,$word){
-		
+		/* 
+			-> check submitted word with word saved in session
+			-> edit score
+		*/
+	}
+
+	function getScore(){
+		/* 
+			-> return current score from session
+		*/
 	}
 
 ?>
