@@ -8,6 +8,13 @@
 
     if((!loadconfig()) || ($_SESSION['setup'] == "1")){
         $page = "SETUP";
+    }else if($page == "ERROR"){
+        if(isset($_GET['e'])){
+            $error = $_GET['e'];
+            showerror($error);
+        }else{
+            showerror("105");
+        }
     }else{
         if(isset($_GET['page'])){
             $page = strtoupper($_GET['page']);

@@ -2,8 +2,8 @@
 
 	require "/php/settings.php";
 
-	loadconfig();
 	session_start();
+	loadconfig();
 
 	if($_SESSION['setup'] == "1"){
 		$flag = false;
@@ -32,23 +32,44 @@
 	if($flag){
 		$connection = mysqli_connect($server,$username,$password);
 		if(!$connection){
-			die("Connection Error: " . mysqli_connect_error());
 			$url = "Location: index.php?page=error&e=100";
 		}
 
-		$sql = "CREATE DATABASE fmGerman CHARACTER SET utf8 COLLATE utf8_unicode_ci";
+		$sql = "CREATE DATABASE flashMe CHARACTER SET utf8 COLLATE utf8_unicode_ci";
 		if(mysqli_query($connection,$sql)){
 			$_SESSION['setup'] = "0";
 			$_SESSION['dbUsername'] = $username;
 			$_SESSION['dbPassword'] = $password;
 			$_SESSION['dbServerName'] = $server;
 			saveconfig();
-			echo mysqli_error();
-			$url = "Location: index.php?page=word";
+			mysqli_close($connection);
+
+			$connection = mysqli_connect($server,$username,$password,"flashMe");
+			if(!$connection){
+				$url = "Location: index.php?page=error&e=100";
+			}
+			/*
+				There are 2 words in the english language that are to long to be
+				entered into engword.
+			*/
+			$sql = "CREATE TABLE german (
+				id INT(10) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+				word VARCHAR(100) NOT NULL,
+				plural VARCHAR(100),
+				gender VARCHAR(5) DEFAULT 'NONE',
+				type VARCHAR(20) NOT NULL,
+				engword VARCHAR(250) NOT NULL
+			)";
+
+			if(mysqli_query($connection,$sql)){
+				$url = "Location: index.php?page=word";
+			}else{
+				$url = "Location: index.php?page=error&e=103";
+			}
+			mysqli_close($connection);
 		}else{
 			$url = "Location: index.php?page=error&e=101";
 		}
-		mysqli_close($connection);
 	}else{
 		$url = "Location: index.php?page=error&e=102";
 	}
